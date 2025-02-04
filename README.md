@@ -1,7 +1,4 @@
-# Ejercicio POO – Identificación de clases, atributos, métodos y relaciones
-
-
-# Guía de Estudio: Diseño Orientado a Objetos en C++
+# Guía de Estudio: Diseño Orientado a Objetos
 
 ## **1. Introducción**
 
@@ -75,19 +72,21 @@ classDiagram
         - string nombre
         - string correo
         - int edad
+        - Publicacion [] publicaciones
         + publicarFoto()
     }
     
     class Publicacion {
         - string contenido
         - date fecha
+        - int likes
         + recibirMeGusta()
     }
     
-    Usuario "1" -- "*" Publicacion : crea
+    Usuario o-- Publicacion : tiene
 ```
 
-Este diagrama representa cómo un `Usuario` puede crear múltiples `Publicaciones`, estableciendo una relación clara entre ambas entidades. Para modelar mejor esta relación, se puede incluir una lista de publicaciones dentro de la clase `Usuario`, lo que indica que cada usuario tiene un conjunto de publicaciones asociadas. Esto permite gestionar de manera más efectiva las interacciones dentro del sistema y visualizar mejor cómo los objetos están conectados en una red social.
+Este diagrama representa cómo un `Usuario` puede crear múltiples `Publicaciones`, estableciendo una relación clara entre ambas entidades. Para modelar mejor esta relación, se incluye una lista de publicaciones dentro de la clase `Usuario`, lo que indica que cada usuario tiene un conjunto de publicaciones asociadas. 
 
 #### **Reglas para representar diagramas de clases:**
 
@@ -97,8 +96,34 @@ Este diagrama representa cómo un `Usuario` puede crear múltiples `Publicacione
 - **Las relaciones** entre clases se representan con líneas:
   - **Asociación**: Línea simple entre clases, indica que una clase usa otra.
   - **Agregación**: Línea con un rombo vacío, indica que una clase contiene a otra, pero pueden existir de manera independiente. Este tipo de relación se estudiará en detalle más adelante en el curso, junto con otros conceptos avanzados como la agregación y la herencia, que permiten modelar sistemas de software de manera más estructurada y reutilizable.
-  - **Composición**: Línea con un rombo lleno, indica que una clase no puede existir sin la otra. Este tipo de relación se estudiará en detalle más adelante en el curso, junto con otros conceptos avanzados como la agregación y la herencia, que permiten modelar sistemas de software de manera más estructurada y reutilizable.
   - **Herencia**: Flecha con triángulo, indica que una clase hereda atributos y métodos de otra. Este tipo de relación se estudiará en detalle más adelante en el curso, junto con otros conceptos avanzados como la agregación y la herencia, que permiten modelar sistemas de software de manera más estructurada y reutilizable.
+ 
+### **¿Qué es Mermaid y cómo usarlo en Markdown para diagramas UML?**
+
+Mermaid es una herramienta que permite generar diagramas a partir de texto en archivos Markdown. Es especialmente útil para representar diagramas UML dentro de documentación en GitHub, GitLab o cualquier otro entorno compatible con Markdown.
+
+#### **¿Cómo se usa Mermaid en un archivo Markdown?**
+Para incluir un diagrama UML en un archivo Markdown, utiliza la siguiente sintaxis:
+
+```mermaid
+classDiagram
+    class Persona {
+        - string nombre
+        - int edad
+        + mostrarInformacion()
+    }
+```
+Esto generará un diagrama UML de clases donde `Persona` tiene atributos privados `nombre` y `edad`, y un método público `mostrarInformacion()`.
+
+#### **¿Dónde encontrar más información?**
+Puedes aprender más sobre Mermaid en su documentación oficial: [https://mermaid.js.org/](https://mermaid.js.org/)
+
+#### **¿Por qué es útil?**
+- Permite documentar diagramas UML directamente en archivos Markdown sin necesidad de herramientas externas.
+- Facilita la colaboración en proyectos, ya que los diagramas pueden versionarse junto con el código.
+- Es compatible con plataformas como GitHub y GitLab, lo que lo hace ideal para documentar proyectos de software.
+
+
 
 ### **2.1 Clases y Objetos**
 
@@ -145,16 +170,41 @@ Las **relaciones** en la Programación Orientada a Objetos (POO) son conexiones 
 
 Existen varios tipos de relaciones, cada una con un propósito distinto:
 
-- **Asociación:** Una relación en la que un objeto usa o interactúa con otro.
+- **Asociación:** Una relación en la que un objeto usa o interactúa con otro. 
 - **Agregación:** Una relación en la que una clase contiene a otra, pero ambos objetos pueden existir independientemente.
-- **Composición:** Una relación en la que una clase contiene a otra, y la existencia del objeto secundario depende del objeto principal.
 - **Herencia:** Una relación en la que una clase deriva de otra y hereda sus atributos y métodos.
 
 Los conceptos de agregación, composición y herencia se estudiarán en detalle más adelante en el curso, pero por ahora nos centraremos en la asociación, que es una de las formas más comunes de relación en POO.
 
+A continuación, se muestra un esquema visual de cómo se representan las distintas relaciones en UML:
+
+### **Asociación **
+```mermaid
+classDiagram
+    class A {
+        +atributos
+    }
+    class B {
+        +atributos
+    }
+    A --> B : usa
+```
+
+### **Agregación**
+```mermaid
+classDiagram
+    class Todo {
+        +atributos
+    }
+    class Parte {
+        +atributos
+    }
+    Todo o-- Parte : contiene
+```
+
 ### **2.3.1 Relaciones de Asociación**
 
-La **asociación** es una relación entre dos clases que permite que un objeto de una clase interactúe con un objeto de otra clase. Se utiliza para representar dependencias entre entidades dentro de un sistema.
+La **asociación** es una relación entre dos clases en la que una clase depende o interactúa con otra de alguna manera. En UML, se representa con una línea simple entre las clases, y puede incluir una flecha para indicar dirección si es necesario. La asociación no implica propiedad, solo indica que existe una relación entre las clases.
 
 📌 **Ejemplo:** En un videojuego como Minecraft, una clase `Jugador` puede estar asociada a una clase `Inventario`, donde cada `Jugador` tiene su propio `Inventario` que almacena objetos como herramientas y bloques.
 
@@ -163,36 +213,22 @@ classDiagram
     class Jugador {
         - string nombre
         - int nivel
+        - Inventario inventario
         + usarObjeto()
+
     }
     class Inventario {
-        - list objetos
+        - Objeto [] objetos
         + agregarObjeto()
     }
-    Jugador "1" -- "1" Inventario : posee
-```
 
-Esta relación muestra que cada `Jugador` tiene exactamente un `Inventario`, y el `Inventario` solo pertenece a ese `Jugador`.
-
-La **asociación** es una relación entre dos clases que permite que un objeto de una clase interactúe con un objeto de otra clase. Se utiliza para representar dependencias entre entidades dentro de un sistema.
-
-📌 **Ejemplo:** En un videojuego como Minecraft, una clase `Jugador` puede estar asociada a una clase `Inventario`, donde cada `Jugador` tiene su propio `Inventario` que almacena objetos como herramientas y bloques.
-
-```mermaid
-classDiagram
-    class Jugador {
+    class Objeto {
         - string nombre
-        - int nivel
-        + usarObjeto()
+        - string tipo
     }
-    class Inventario {
-        - list objetos
-        + agregarObjeto()
-    }
-    Jugador "1" -- "1" Inventario : posee
+    Jugador --> Inventario : tiene
+    Inventario o--> Objeto: tiene
 ```
-
-Esta relación muestra que cada `Jugador` tiene exactamente un `Inventario`, y el `Inventario` solo pertenece a ese `Jugador`.
 
 ### **2.4 Encapsulamiento y Abstracción**
 
@@ -319,7 +355,7 @@ classDiagram
     class Propietario {
         - int id
         - string nombre
-        - list perros
+        - list<Perro> perros
         + registrarPerro()
         + listarPerros()
     }
@@ -339,14 +375,16 @@ classDiagram
     class VisitaVeterinaria {
         - date fecha
         - string motivo
+        - Perro perroVisitar
+        - Veterinario veterinarioAtencion
         + registrarVisita()
     }
     
-    Propietario "1" -- "*" Perro : tiene
-    Perro "1" -- "1" Raza : pertenece
-    Perro "1" -- "1" Veterinario : es atendido por
-    Perro "1" -- "*" VisitaVeterinaria : tiene
-    Veterinario "1" -- "*" VisitaVeterinaria : realiza
+    Propietario o-- Perro : tiene
+    Perro --> Raza : pertenece a
+    Perro --> Veterinario : es atendido por
+    Perro <-- VisitaVeterinaria : tiene
+    Veterinario <-- VisitaVeterinaria : realiza
 ```
 
 Este diagrama representa cómo las clases interactúan entre sí en el sistema. Cada `Propietario` puede tener varios `Perro`s, cada `Perro` pertenece a una `Raza`, y cada `Perro` tiene un `Veterinario` asignado. Además, se registran `VisitaVeterinaria`s, en las que un `Perro` es atendido por un `Veterinario` en una fecha específica.
@@ -453,87 +491,10 @@ Este diagrama representa cómo las clases interactúan en el sistema. Cada `Usua
   </details>
 
 
-#### Ejercicios extras: Diagramar a partir de un enunciado
-### Objetivos
 
-> Aplicar los conocimientos de programación orientada a objetos para analizar una descripción de un sistema y, con base en ella, identificar y categorizar las clases, atributos, métodos y relaciones necesarias para modelar dicho sistema.
+### Ejercicio 2: Definir el Enunciado de un Problema a Partir de UML Diagrama : Sistema de Gestión de Pedidos en un Restaurante
 
-### Instrucciones
-
-1. Extraer la Información Necesaria:
-    - Seleccionar de los 6 enunciados propuestos 1 para el que quiera hacer el modelo
-    - Identificar las clases involucradas en el sistema.
-    - Determinar los atributos y métodos principales para cada elemento junto con sus relaciones. Puede agregar otros métodos que considere relevantes. 
-    - Identificar las relaciones entre los elementos, incluyendo la cardinalidad.
-    
-2. Diseña el Diagrama UML:
-    - Crear un diagrama UML que represente los elementos. Usar Mermaid para representar el diagrama y poner el código fuente del diagrama en el README. Para que el diagrama sea renderizado correctamente.
-    - Indicr claramente las relaciones de asociación entre los elementos, especificando la cardinalidad de cada relación.
-    - Crear un archivo ``Markdown`` y copiar allí el diagrama de clases final. Haga commit y push al repositorio. Escriban en el markdown los nombres de los integrantes del equipo. 
-
-### Ejercicios
-#### 1. Caso Biblioteca 
-
-Estás desarrollando una aplicación para gestionar una biblioteca. La biblioteca maneja información sobre libros, lectores y préstamos. 
-
-La biblioteca tiene un amplio catálogo de libros, cada uno con un título único, un código ISBN que lo identifica de manera exclusiva y un año de publicación. Los lectores, por otro lado, son personas registradas en la biblioteca con un número de socio único y una fecha de registro.
-
-Para gestionar el préstamo de libros, es necesario registrar cada préstamo, incluyendo el libro prestado, el lector que realiza el préstamo y la fecha en que se realizó. Además, debe ser posible registrar cuando un libro es devuelto, actualizando así el estado del préstamo.
-
-Los lectores pueden prestar varios libros de la biblioteca a lo largo del tiempo. Sin embargo, un préstamo específico siempre corresponde a un solo libro prestado a un solo lector en una fecha específica.
-
-#### 2. Caso Hotel
-
-Estás desarrollando una aplicación para gestionar un sistema de reservas de hoteles. El sistema maneja información sobre habitaciones, huéspedes y reservas. 
-
-El hotel tiene un amplio número de habitaciones, cada una con un número único, un tipo de habitación (individual, doble, suite) y una tarifa por noche. Los huéspedes son personas registradas en el hotel con un número de identificación único y una fecha de registro.
-
-Para gestionar las reservas, es necesario registrar cada reserva, incluyendo la habitación reservada, el huésped que realiza la reserva y la fecha de inicio y fin de la reserva. Además, debe ser posible actualizar el estado de la reserva a completada una vez que el huésped ha hecho check-out.
-
-Los huéspedes pueden hacer varias reservas a lo largo del tiempo. Sin embargo, una reserva específica siempre corresponde a una sola habitación reservada por un solo huésped en un periodo específico.
-
-#### 3. Caso Tienda de Mascotas
-
-Estás desarrollando una aplicación para gestionar una clínica veterinaria. La clínica maneja información sobre mascotas, dueños y citas. 
-
-La clínica atiende a muchas mascotas, cada una con un nombre único, una especie (perro, gato, etc.) y una fecha de nacimiento. Los dueños son personas registradas en la clínica con un número de identificación único y una fecha de registro.
-
-Para gestionar las citas, es necesario registrar cada cita, incluyendo la mascota atendida, el dueño que lleva a la mascota y la fecha y hora de la cita. Además, debe ser posible actualizar el estado de la cita a completada una vez que la mascota ha sido atendida.
-
-Los dueños pueden tener varias mascotas y pueden llevarlas a varias citas a lo largo del tiempo. Sin embargo, una cita específica siempre corresponde a una sola mascota atendida por un solo dueño en una fecha y hora específicas.
-
-#### 4. Caso Tienda de Música
-
-Estás desarrollando una aplicación para gestionar una tienda de música. La tienda maneja información sobre álbumes, clientes y compras. 
-
-La tienda tiene un amplio catálogo de álbumes, cada uno con un título único, un código de identificación y una fecha de lanzamiento. Los clientes son personas registradas en la tienda con un número de identificación único y una fecha de registro.
-
-Para gestionar las compras, es necesario registrar cada compra, incluyendo el álbum comprado, el cliente que realiza la compra y la fecha de la compra. Además, debe ser posible registrar cuando un álbum es devuelto, actualizando así el estado de la compra.
-
-Los clientes pueden comprar varios álbumes a lo largo del tiempo. Sin embargo, una compra específica siempre corresponde a un solo álbum comprado por un solo cliente en una fecha específica.
-
-### 5. Caso Escuela de Música
-
-Estás desarrollando una aplicación para gestionar una escuela de música. La escuela maneja información sobre cursos, estudiantes e inscripciones.
-
-La escuela ofrece una variedad de cursos, cada uno con un nombre único, un código de curso y una duración en semanas. Los estudiantes son personas registradas en la escuela con un número de identificación único y una fecha de inscripción.
-
-Para gestionar las inscripciones, es necesario registrar cada inscripción, incluyendo el curso en el que se inscribe, el estudiante que realiza la inscripción y la fecha de la inscripción. Además, debe ser posible registrar cuando un estudiante completa un curso, actualizando así el estado de la inscripción.
-
-Los estudiantes pueden inscribirse en varios cursos a lo largo del tiempo. Sin embargo, una inscripción específica siempre corresponde a un solo curso inscrito por un solo estudiante en una fecha específica.
-
-#### 6. Caso Galería de Arte
-
-Estás desarrollando una aplicación para gestionar una galería de arte. La galería maneja información sobre obras de arte, artistas y exposiciones. 
-
-La galería tiene una colección de obras de arte, cada una con un título único, un código de identificación y una fecha de creación. Los artistas son personas registradas en la galería con un número de identificación único y una fecha de registro.
-
-Para gestionar las exposiciones, es necesario registrar cada exposición, incluyendo la obra de arte exhibida, el artista que la creó y la fecha de la exposición. Además, debe ser posible registrar cuando una exposición termina, actualizando así el estado de la exposición.
-
-Los artistas pueden tener varias obras de arte exhibidas a lo largo del tiempo. Sin embargo, una exposición específica siempre corresponde a una sola obra de arte exhibida por un solo artista en una fecha específica.
-
-***
-## Ejercicio 2: Definir el Enunciado de un Problema a Partir de UML Diagrama : Sistema de Gestión de Pedidos en un Restaurante
+### **Diagrama : Sistema de Gestión de Pedidos en un Restaurante**
 
 ```mermaid
 classDiagram
@@ -544,13 +505,15 @@ classDiagram
     class Pedido {
         +int numeroPedido
         +string estado
+        +Cliente cliente
+        +list<Plato> platos
     }
     class Plato {
         +string nombre
         +float precio
     }
-    Cliente "1" -- "*" Pedido : realiza
-    Pedido "1" -- "*" Plato : contiene
+    Pedido o-- Plato : contiene
+    Pedido --> Cliente : pertenece a
 ```
 
 **Instrucciones:**
@@ -559,7 +522,7 @@ classDiagram
 - Explica las relaciones entre las clases y su importancia en el contexto del problema.
 ---
 
-## Ejercicio 3: Modelando un Sistema de Control de Versiones
+### Ejercicio 3: Modelando un Sistema de Control de Versiones
 
 ### Contexto
 
@@ -577,19 +540,15 @@ Cada **usuario** tiene un nombre y un correo electrónico y puede crear múltipl
 
 Un **commit** es una instantánea del estado del código en un momento específico. Contiene un identificador único, un mensaje descriptivo sobre los cambios realizados, la fecha en que se guardó y el usuario que lo hizo. A través de los commits, los programadores pueden visualizar el historial de modificaciones y revertir cambios si es necesario.
 
-Además de commits, un repositorio puede contener otros elementos importantes como:
-
-- **Archivos y directorios:** Son los elementos que almacenan el código fuente y la documentación del proyecto.
-- **Historial de cambios:** Un registro que muestra el orden y detalle de los commits realizados en el repositorio.
-
 ### Instrucciones
 
 1. Identificar las clases principales del sistema y definir sus atributos y métodos.
 2. Determinar las relaciones entre estas clases y su jerarquía.
 3. Crear un diagrama UML que represente la estructura del sistema.
-4. Explicar en texto el funcionamiento del modelo y los roles de cada elemento.
+
 
 ### Entrega
+
 > SI QUIERE QUE ESTA ACTIVIDAD LE SEA REVISADA CREE ARCHIVOS EN EXTENSION .MD POR CADA MIEMBRO DEL EQUIPO EN EL REPOSITORIO Y HAGA PUSH CREADO DESDE EL GITHUB CLASSROOM
 
 <details>
@@ -600,21 +559,16 @@ Además de commits, un repositorio puede contener otros elementos importantes co
 ```mermaid
 classDiagram
     class Usuario {
-        +string nombre
-        +string correo
-        +Repositorio[] repositorios
-        +crearRepositorio()
-        +hacerCommit()
-        +verHistorial()
+        -string nombre
+        -string correo
+        -Repositorio[] repositorios
+        + agregarRepositorio()
     }
 
     class Repositorio {
-        +string nombre
-        +Usuario propietario
-        +Commit[] historialCommits
-        +Archivo[] archivos
-        +agregarArchivo()
-        +verHistorialCommits()
+        -string nombre
+        -Commit[] historialCommits
+        + agregarCommis(Usuario autor)
     }
 
     class Commit {
@@ -623,21 +577,18 @@ classDiagram
         +string fecha
         +Usuario autor
         +Archivo[] archivosModificados
-        +verCambios()
+        + agregarArchivosStaggingArea()
     }
 
     class Archivo {
         +string nombre
         +string contenido
-        +modificarContenido()
-        +verVersionAnterior()
     }
 
-    Usuario "1" -- "*" Repositorio : posee
-    Repositorio "1" -- "*" Commit : almacena
-    Repositorio "1" -- "*" Archivo : contiene
-    Commit "1" -- "*" Archivo : modifica
-    Commit "1" -- "1" Usuario : autor
+    Usuario o-- Repositorio : posee
+    Repositorio o-- Commit : almacena
+    Commit o-- Archivo : modifica
+    Commit --> Usuario : autor
 ```
 </details>
 
@@ -645,7 +596,3 @@ classDiagram
 
 - [Editor de UML Mermaid](https://mermaid.live/edit)
 - [GitHub Classroom](https://classroom.github.com)
-
-
-
-
